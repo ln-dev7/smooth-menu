@@ -8,39 +8,21 @@ import {
   Skull,
   X,
 } from "lucide-react";
-import React, { useEffect } from "react";
+import React from "react";
+
+const transformValues = [
+  { height: 0, transformY: -200 },
+  { height: 252, transformY: 0 },
+  { height: 186, transformY: -240 },
+  { height: 172, transformY: -430 },
+  { height: 168, transformY: -600 },
+];
 
 export default function App() {
   const [active, setActive] = React.useState(-1);
-  const handleChangeActive = (index: number) => {
-    setActive(index);
-  };
-  const [height, setHeight] = React.useState(0);
-  const [transformY, setTransformY] = React.useState(0);
-  useEffect(() => {
-    switch (active) {
-      case -1:
-        setHeight(0);
-        setTransformY(-200);
-        break;
-      case 0:
-        setHeight(252);
-        setTransformY(0);
-        break;
-      case 1:
-        setHeight(186);
-        setTransformY(-240);
-        break;
-      case 2:
-        setHeight(172);
-        setTransformY(-430);
-        break;
-      case 3:
-        setHeight(168);
-        setTransformY(-600);
-        break;
-    }
-  }, [active]);
+
+  const { height, transformY } = transformValues[active + 1];
+
   return (
     <main className="relative w-full h-screen flex items-center justify-center p-12">
       <div className="relative p-3 max-w-xl w-full flex flex-col items-center gap-3">
@@ -51,7 +33,7 @@ export default function App() {
             opacity: active === -1 ? 0 : 1,
           }}
           className="p-2 rounded-full bg-slate-100 text-slate-800"
-          onClick={() => handleChangeActive(-1)}
+          onClick={() => setActive(-1)}
         >
           <X size={24} />
         </button>
@@ -63,32 +45,19 @@ export default function App() {
               active === -1 ? "translateY(-26px)" : "translateY(-150px)",
           }}
         >
-          <button
-            className="font-semibold rounded-full w-full p-1.5 text-slate-800 z-20"
-            onClick={() => handleChangeActive(0)}
-          >
-            Portfolio
-          </button>
-          <button
-            className="font-semibold rounded-full w-full p-1.5 text-slate-800 z-20"
-            onClick={() => handleChangeActive(1)}
-          >
-            Launches
-          </button>
-          <button
-            className="font-semibold rounded-full w-full p-1.5 text-slate-800 z-20"
-            onClick={() => handleChangeActive(2)}
-          >
-            Products
-          </button>
-          <button
-            className="font-semibold rounded-full w-full p-1.5 text-slate-800 z-20"
-            onClick={() => handleChangeActive(3)}
-          >
-            Company
-          </button>
+          {["Portfolio", "Launches", "Products", "Company"].map(
+            (label, index) => (
+              <button
+                key={index}
+                className="font-semibold rounded-full w-full p-1.5 text-slate-800 z-20"
+                onClick={() => setActive(index)}
+              >
+                {label}
+              </button>
+            )
+          )}
           <div
-            className="p-1.5 flex items-cnter justify-center absolute inset-0 w-1/4 z-10"
+            className="p-1.5 flex items-center justify-center absolute inset-0 w-1/4 z-10"
             style={{
               transform: `translateX(${active * 100}%)`,
               transition: "transform 0.3s",
